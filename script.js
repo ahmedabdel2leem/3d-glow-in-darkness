@@ -19,11 +19,11 @@ const canvas = document.querySelector('canvas#webgl')
 // scene
 const scene = new THREE.Scene();
 
+const group = new THREE.Group();
 
 // Mesh 
 const mesh = new THREE.Mesh(new THREE.BoxGeometry(1,1,1),new THREE.MeshBasicMaterial({color:0x00ff00}));
-
-const group = new THREE.Group();
+group.add(mesh)
 
 for(let i=0;i<80;i++){
     const mesh = new THREE.Mesh(new THREE.BoxGeometry(1,1,1),new THREE.MeshBasicMaterial({color:0x00f00}));
@@ -32,8 +32,6 @@ for(let i=0;i<80;i++){
     mesh.position.z = Math.random()*10-5;
     group.add(mesh);
 }
-
-group.add(mesh);
 
 
 scene.add(group);
@@ -62,15 +60,27 @@ renderer.setSize(window.innerWidth,window.innerHeight);
 //render the scene
 renderer.render(scene,camera);
 
+const clock = new THREE.Clock()
 
 const ta= ()=>{
+
+    const elepsedTime = clock.getElapsedTime();
+
+
     // update controls
     controls.update();
 
+    // console.log(group) //group children mesh.position
+
+    for (let cube of group.children) {
+        cube.rotation.x = elepsedTime 
+        cube.rotation.y = elepsedTime 
+        cube.rotation.z = elepsedTime 
+    }
     // rotate the cubes
-    group.rotation.x +=0.002
-    group.rotation.y +=0.002
-    group.rotation.z +=0.002
+    // group.rotation.x +=0.002
+    // group.rotation.y +=0.002
+    // group.rotation.z +=0.002
 
     // render the scene
     renderer.render(scene,camera);
